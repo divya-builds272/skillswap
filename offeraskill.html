@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillSwap — Offer Your Skill</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', 'Poppins', sans-serif;
+    background:#FDF3E7;
+    color:#1E1B3A;
+    position:relative;
+    overflow-x:hidden;
+  }
+  a { text-decoration:none; color:inherit; }
+
+  /* Background blobs */
+  .blob { position:absolute; border-radius:50%; z-index:0; opacity:0.9; }
+  .blob1 { top:60px; left:-60px; width:220px; height:220px; background:#D9CEFB; border-radius:50% 45% 55% 50% / 55% 50% 50% 45%; }
+  .blob2 { top:60px; right:-40px; width:180px; height:180px; background:#C9E8CB; border-radius:45% 55% 50% 50% / 50% 45% 55% 50%; }
+  .blob3 { top:350px; left:-100px; width:220px; height:220px; background:#F6C8C0; border-radius:50%; }
+  .blob4 { bottom:180px; left:-60px; width:180px; height:180px; background:#C9DCF6; border-radius:50%; }
+  .blob5 { bottom:60px; right:-60px; width:200px; height:200px; background:#F6C8D0; border-radius:50%; }
+
+  /* Navbar */
+  .navbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 60px; position:relative; z-index:2;
+  }
+  .logo { font-size:22px; font-weight:800; color:#1E1B3A; }
+  .nav-links { display:flex; gap:36px; font-size:15px; font-weight:500; color:#3A3560; }
+  .nav-links a.active { color:#5B5FEF; border-bottom:2px solid #5B5FEF; padding-bottom:4px; }
+  .nav-right { display:flex; align-items:center; gap:22px; }
+  .search-icon { font-size:18px; cursor:pointer; }
+  .btn-primary {
+    background:#5B5FEF; color:#fff; border:none;
+    padding:11px 22px; border-radius:24px; font-weight:600;
+    font-size:14px; cursor:pointer;
+  }
+
+  /* Header */
+  .page-header {
+    position:relative; z-index:2;
+    text-align:center; padding:40px 20px 20px;
+  }
+  .header-icon-row {
+    display:flex; align-items:center; justify-content:center; gap:16px;
+  }
+  .plus-icon {
+    width:56px; height:56px; background:#5B5FEF; border-radius:18px;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:26px; font-weight:700;
+  }
+  .page-header h1 { font-size:44px; font-weight:800; }
+  .page-header p.subtext { margin-top:14px; color:#5A5568; font-size:16px; }
+
+  .doodle {
+    position:absolute; color:#5B5FEF; font-family:'Comic Sans MS', cursive; font-size:15px; line-height:1.3;
+    z-index:2;
+  }
+  .doodle-left { top:190px; left:60px; text-align:left; }
+  .doodle-right { top:640px; right:60px; text-align:left; }
+
+  /* Form card */
+  .form-wrap { position:relative; z-index:2; display:flex; justify-content:center; padding:20px 20px 60px; }
+  .form-card {
+    background:#FFFDF9; border-radius:26px; padding:44px 50px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.05);
+    width:100%; max-width:640px;
+  }
+  .field { margin-bottom:26px; }
+  .field label { display:block; font-weight:700; font-size:14px; margin-bottom:10px; }
+  .field label .req { color:#5B5FEF; }
+  .input-box {
+    display:flex; align-items:center; gap:10px;
+    border:1.5px solid #E7DFCF; border-radius:12px;
+    padding:14px 16px; background:#fff;
+  }
+  .input-box input, .input-box select, .input-box textarea {
+    border:none; outline:none; font-size:14px; font-family:inherit;
+    width:100%; background:transparent; color:#1E1B3A;
+  }
+  .input-box select { appearance:none; cursor:pointer; }
+  .input-box.textarea { align-items:flex-start; }
+  .input-box textarea { resize:vertical; min-height:100px; }
+  .icon { color:#8A8497; font-size:16px; flex-shrink:0; }
+
+  .row-2 { display:flex; gap:24px; }
+  .row-2 .field { flex:1; }
+
+  .upload-box {
+    border:2px dashed #B9C4EF; border-radius:16px; background:#F0F2FE;
+    padding:40px 20px; text-align:center; cursor:pointer;
+  }
+  .upload-box .upload-icon { font-size:34px; color:#5B5FEF; margin-bottom:14px; }
+  .upload-box .main-text { font-weight:600; font-size:15px; }
+  .upload-box .sub-text { font-size:13px; color:#8A8497; margin-top:6px; }
+
+  .btn-publish {
+    width:100%; background:#5B5FEF; color:#fff; border:none;
+    padding:17px; border-radius:26px; font-weight:700; font-size:16px;
+    cursor:pointer; margin-top:10px;
+  }
+  .note {
+    text-align:center; font-size:13px; color:#8A8497; margin-top:16px;
+  }
+
+  footer {
+    position:relative; z-index:2;
+    padding:30px 60px; display:flex; justify-content:space-between; align-items:center;
+    color:#8A8497; font-size:14px; flex-wrap:wrap; gap:10px;
+  }
+  footer .logo { font-size:18px; }
+
+  @media(max-width:700px){
+    .navbar, .form-wrap, footer { padding-left:20px; padding-right:20px; }
+    .nav-links { display:none; }
+    .doodle { display:none; }
+    .row-2 { flex-direction:column; gap:0; }
+    .page-header h1 { font-size:32px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="blob blob4"></div>
+  <div class="blob blob5"></div>
+
+  <div class="navbar">
+    <div class="logo">SkillSwap ~</div>
+    <div class="nav-links">
+      <a href="index.html">Find a Skill</a>
+      <a class="active" href="creator'sprofile.html">Creator's Profile</a>
+      <a href="offeraskill.html">Offer a skill</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <span class="search-icon">🔍</span>
+      <button class="btn-primary">Get Started</button>
+    </div>
+  </div>
+
+  <div class="doodle doodle-left">turn<br>your passion<br>into income ♡</div>
+  <div class="doodle doodle-right">real<br>skills<br>real<br>opportunities ♡</div>
+
+  <div class="page-header">
+    <div class="header-icon-row">
+      <div class="plus-icon">+</div>
+      <h1>Offer Your Skill</h1>
+    </div>
+    <p class="subtext">Share what you're great at — someone out there needs it.</p>
+  </div>
+
+  <div class="form-wrap">
+    <form class="form-card">
+
+      <div class="field">
+        <label>Your name <span class="req">*</span></label>
+        <div class="input-box">
+          <span class="icon">👤</span>
+          <input type="text" placeholder="e.g. Aarav Sharma" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Skill category <span class="req">*</span></label>
+        <div class="input-box">
+          <span class="icon">🎨</span>
+          <select required>
+            <option value="" selected disabled>Select a category</option>
+            <option>Design</option>
+            <option>Video Editing</option>
+            <option>Tutoring</option>
+            <option>Music & Audio</option>
+            <option>Writing</option>
+            <option>Photography</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Skill title <span class="req">*</span></label>
+        <div class="input-box">
+          <span class="icon">✨</span>
+          <input type="text" placeholder="e.g. Logo Design, Video Editing, Guitar Lessons" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Description <span class="req">*</span></label>
+        <div class="input-box textarea">
+          <span class="icon">📄</span>
+          <textarea placeholder="Tell us about your skill, experience, what you offer, and what makes you different..." required></textarea>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Price <span class="req">*</span></label>
+          <div class="input-box">
+            <span class="icon">₹</span>
+            <input type="number" placeholder="e.g. 300" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Delivery time <span class="req">*</span></label>
+          <div class="input-box">
+            <span class="icon">🕐</span>
+            <select required>
+              <option value="" selected disabled>Select time</option>
+              <option>1 day</option>
+              <option>3 days</option>
+              <option>1 week</option>
+              <option>2 weeks</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Upload portfolio <span class="req">*</span></label>
+        <div class="upload-box">
+          <div class="upload-icon">☁️</div>
+          <div class="main-text">Drag & drop or click to upload images</div>
+          <div class="sub-text">(JPG, PNG • Max 10MB each)</div>
+          <input type="file" multiple accept="image/*" style="display:none;">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-publish">✨ Publish Skill</button>
+      <p class="note">ⓘ Your skill will appear in Explore once published.</p>
+
+    </form>
+  </div>
+
+  <footer>
+    <div class="logo">SkillSwap ~</div>
+    <div>Made for creators who are just getting started.</div>
+    <div>© 2026 SkillSwap</div>
+  </footer>
+
+</body>
+</html>

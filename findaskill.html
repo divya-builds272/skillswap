@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore Skills — SkillSwap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #211B3B;
+    --ink-soft: #635C7B;
+    --bg: #FCF1E4;
+    --card: #FFFFFF;
+    --purple: #6C4EF0;
+    --purple-deep: #5636D6;
+    --lavender: #EDE6FB;
+    --pink: #F6CBD3;
+    --peach: #F4BD8E;
+    --mint: #CFE4C9;
+    --sun: #F6D98B;
+    --sky: #C9D8F3;
+    --line: rgba(33,27,59,0.10);
+    --radius-card: 22px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .display {
+    font-family: 'Baloo 2', 'Inter', sans-serif;
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0;
+  }
+  .hand { font-family: 'Caveat', cursive; font-weight: 700; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+  img, svg { max-width: 100%; display: block; }
+  .wrap { max-width: 1220px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+  .doodle { display: inline-block; color: var(--purple); }
+  /* ---------- Nav (same as homepage) ---------- */
+  header.site {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(252,241,228,0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.wrap { display: flex; align-items: center; justify-content: space-between; height: 82px; }
+  .logo { display: flex; align-items: center; gap: 6px; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 1.4rem; }
+  .navlinks { display: flex; gap: 34px; font-size: 0.98rem; font-weight: 500; color: var(--ink); }
+  .navlinks a:hover { color: var(--purple); }
+  .navlinks a.active { color: var(--purple); border-bottom: 2px solid var(--purple); padding-bottom: 4px; }
+  .navcta { display: flex; align-items: center; gap: 20px; }
+  .icon-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line); cursor: pointer; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 26px; border-radius: 100px;
+    font-size: 0.96rem; font-weight: 600; cursor: pointer;
+    border: 2px solid transparent; white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-primary { background: var(--purple); color: #fff; }
+  .btn-primary:hover { background: var(--purple-deep); }
+  @media (max-width: 900px) { .navlinks { display: none; } }
+
+  /* ---------- Page header ---------- */
+  .pagehead { padding: 56px 0 28px; position: relative; }
+  .headblob {
+    position: absolute; border-radius: 44% 56% 62% 38% / 40% 46% 54% 60%;
+    z-index: 0;
+  }
+  .hb1 { width: 220px; height: 220px; top: -10px; left: -60px; background: var(--lavender); }
+  .hb2 { width: 150px; height: 90px; top: 60px; left: 30px; background: var(--pink); opacity: .8; border-radius: 50%; }
+  .headcenter { position: relative; z-index: 1; text-align: center; max-width: 640px; margin: 0 auto; }
+  .headcenter h1 { font-size: clamp(2rem, 4vw, 2.9rem); display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .headcenter .lede { margin-top: 14px; color: var(--ink-soft); font-size: 1.05rem; }
+  .handnote-side {
+    position: absolute; right: 4%; top: 10px; z-index: 1;
+    font-size: 1.4rem; color: var(--purple-deep); line-height: 1.2; text-align: left;
+  }
+  @media (max-width: 980px) { .handnote-side, .headblob { display: none; } }
+
+  .searchbar {
+    max-width: 640px; margin: 34px auto 0;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 100px; padding: 6px 8px 6px 22px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 16px 40px -24px rgba(33,27,59,0.35);
+  }
+  .searchbar input {
+    border: none; outline: none; flex: 1; background: transparent;
+    font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--ink); padding: 12px 0;
+  }
+  .searchbar input::placeholder { color: var(--ink-soft); }
+
+  .chiprow {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin: 26px auto 0; max-width: 860px;
+  }
+  .catchip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 100px;
+    border: 1.5px solid var(--line); background: var(--card);
+    font-size: 0.94rem; font-weight: 600; cursor: pointer;
+    color: var(--ink);
+  }
+  .catchip.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+  /* ---------- Results ---------- */
+  .results-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 40px 0 22px; flex-wrap: wrap; gap: 12px;
+  }
+  .results-count { font-weight: 600; }
+  .sortbox {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--line);
+    padding: 9px 16px; border-radius: 100px; font-size: 0.9rem;
+  }
+  .sortbox select { border: none; background: transparent; font-family: inherit; font-weight: 700; color: var(--purple-deep); }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    padding-bottom: 30px;
+  }
+  @media (max-width: 1040px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 760px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+
+  .skillcard-full {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius-card); padding: 18px;
+  }
+  .skillcard-full .badge {
+    width: 100%; aspect-ratio: 16/11; border-radius: 44% 56% 60% 40% / 46% 40% 60% 54%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.4rem; margin-bottom: 16px;
+  }
+  .skillcard-full h3 { font-size: 1.08rem; }
+  .skillcard-full .note { font-weight: 400; font-size: 0.82rem; color: var(--ink-soft); }
+  .creatorline { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .creatorline .mini-av {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    font-size: 0.66rem; font-weight: 700;
+  }
+  .creatorline span { font-size: 0.85rem; color: var(--ink-soft); }
+  .ratingline { margin-top: 10px; font-size: 0.9rem; }
+  .ratingline .cnt { color: var(--ink-soft); }
+  .priceline { margin-top: 2px; font-weight: 700; font-size: 1rem; }
+  .skillcard-full .btn { width: 100%; justify-content: center; margin-top: 14px; padding: 11px; font-size: 0.9rem; }
+
+  .empty-state {
+    background: var(--lavender); border-radius: 28px;
+    padding: 56px 28px; text-align: center; position: relative;
+    display: none;
+  }
+  .empty-state.show { display: block; }
+  .empty-state .icon { font-size: 2.2rem; }
+  .empty-state h3 { margin-top: 10px; font-size: 1.3rem; }
+  .empty-state p { margin-top: 6px; color: var(--ink-soft); }
+  .empty-state button {
+    margin-top: 14px; background: none; border: none; color: var(--purple);
+    font-weight: 700; cursor: pointer; font-size: 0.95rem;
+  }
+  footer { border-top: 1px solid var(--line); padding: 44px 0 60px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer .fine { font-size: 0.85rem; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="wrap">
+    <a href="skillswap.html" class="logo">SkillSwap 
+      <svg class="doodle" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12c3-6 6 6 9 0s6-6 9 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </a>
+      
+    <div class="navlinks">
+      <a href="index.html" class="active">Find a Skill</a>
+      <a href="creator'sprofile.html">Creator's profile</a>
+      <a href="offeraskill.html">Offer a Skill</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <div class="navcta">
+      <div class="icon-btn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <a class="btn btn-primary" href="offeraskill.html">Get Started</a>
+    </div>
+  </nav>
+</header>
+
+<section class="pagehead">
+  <div class="headblob hb1"></div>
+  <div class="headblob hb2"></div>
+  <div class="wrap">
+    <div class="handnote-side hand">real people<br>real skills<br>real income ♡</div>
+    <div class="headcenter">
+      <h1>🔎 Explore Skills
+        <svg class="doodle" width="22" height="14" viewBox="0 0 24 14" fill="none"><path d="M2 12c4-10 8 10 12 0s8-10 8 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </h1>
+      <p class="lede">Browse real creators, ready to work on your next project.</p>
+
+      <div class="searchbar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#635C7B" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="#635C7B" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="searchInput" type="text" placeholder="What skill are you looking for?">
+      </div>
+
+      <div class="chiprow" id="chipRow">
+        <button class="catchip active" data-cat="design">🎨 Design</button>
+        <button class="catchip" data-cat="tech">💻 Tech</button>
+        <button class="catchip" data-cat="video">🎬 Video</button>
+        <button class="catchip" data-cat="music">🎵 Music</button>
+        <button class="catchip" data-cat="tutoring">📚 Tutoring</button>
+        <button class="catchip" data-cat="photography">📸 Photography</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="results-bar">
+      <div class="results-count" id="resultsCount">12 results for &ldquo;Design&rdquo;</div>
+      <div class="sortbox">Sort by:
+        <select id="sortSelect">
+          <option value="popular">Popular</option>
+          <option value="rating">Top rated</option>
+          <option value="price-low">Price: low to high</option>
+          <option value="price-high">Price: high to low</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="empty-state" id="emptyState">
+      <div class="icon">🔍</div>
+      <h3>No skills found</h3>
+      <p>Try adjusting your search or filter to find more results.</p>
+      <button id="clearFilters">Clear filters ↺</button>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <div class="logo" style="font-size:1.1rem">SkillSwap</div>
+    <span class="fine">Made for creators who are just getting started.</span>
+    <span class="fine">© 2026 SkillSwap</span>
+  </div>
+</footer>
+
+<script>
+  const SKILLS = [
+    { cat:'design', title:'Poster Design', note:'', creator:'Aarav S.', avatar:'AS', avBg:'var(--peach)', rating:4.8, reviews:96, price:300, icon:'🎨', iconBg:'var(--pink)', profile:"creator'sprofile.ht" },
+    { cat:'design', title:'Logo Design', note:'', creator:'Meera K.', avatar:'MK', avBg:'var(--purple)', rating:4.9, reviews:87, price:500, icon:'🖥️', iconBg:'var(--lavender)', profile:"profile2.html"},
+    { cat:'design', title:'Social Media Graphics', note:'', creator:'Kabir S.', avatar:'KS', avBg:'#5A79B8', rating:4.7, reviews:64, price:250, icon:'🗂️', iconBg:'var(--mint)' },
+    { cat:'design', title:'UI/UX Design', note:'', creator:'Ananya P.', avatar:'AP', avBg:'#B88A56', rating:4.8, reviews:112, price:600, icon:'📱', iconBg:'var(--sun)' },
+    { cat:'design', title:'Thumbnail Design', note:'', creator:'Riya M.', avatar:'RM', avBg:'var(--purple)', rating:4.9, reviews:124, price:350, icon:'🅰️', iconBg:'var(--sky)' },
+    { cat:'design', title:'Illustration', note:'', creator:'Sana R.', avatar:'SR', avBg:'#8A5FA0', rating:4.8, reviews:95, price:400, icon:'✏️', iconBg:'var(--pink)' },
+    { cat:'design', title:'Video Editing', note:'(Reels/Shorts)', creator:'Tushar V.', avatar:'TV', avBg:'#7C9364', rating:4.8, reviews:73, price:450, icon:'▶️', iconBg:'var(--lavender)' },
+    { cat:'design', title:'Branding & Identity', note:'', creator:'Neha S.', avatar:'NS', avBg:'#C97A9A', rating:4.7, reviews:58, price:550, icon:'🅰️', iconBg:'var(--mint)' },
+    { cat:'design', title:'Template Design', note:'', creator:'Diya P.', avatar:'DP', avBg:'#E8A93D', rating:4.6, reviews:42, price:200, icon:'🖼️', iconBg:'var(--sun)' },
+    { cat:'design', title:'Photo Editing', note:'', creator:'Kabir S.', avatar:'KS', avBg:'#5A79B8', rating:4.8, reviews:67, price:300, icon:'📷', iconBg:'var(--pink)' },
+    { cat:'design', title:'Website Design', note:'', creator:'Aarav S.', avatar:'AS', avBg:'var(--peach)', rating:4.9, reviews:101, price:700, icon:'💻', iconBg:'var(--sky)' },
+    { cat:'design', title:'Packaging Design', note:'', creator:'Meera K.', avatar:'MK', avBg:'var(--purple)', rating:4.7, reviews:53, price:500, icon:'🛍️', iconBg:'var(--lavender)' },
+
+    { cat:'tech', title:'Web Development', note:'', creator:'Sana R.', avatar:'SR', avBg:'#8A5FA0', rating:4.9, reviews:88, price:2000, icon:'💻', iconBg:'var(--sky)' },
+    { cat:'tech', title:'App Prototyping', note:'', creator:'Kabir S.', avatar:'KS', avBg:'#5A79B8', rating:4.7, reviews:39, price:900, icon:'📱', iconBg:'var(--lavender)' },
+    { cat:'tech', title:'Python Tutoring', note:'', creator:'Arjun K.', avatar:'AK', avBg:'var(--peach)', rating:4.9, reviews:62, price:350, icon:'🐍', iconBg:'var(--mint)' },
+
+    { cat:'video', title:'Wedding Films', note:'', creator:'Rohan D.', avatar:'RD', avBg:'#7C9364', rating:4.8, reviews:31, price:5000, icon:'🎬', iconBg:'var(--pink)' },
+    { cat:'video', title:'YouTube Editing', note:'', creator:'Tushar V.', avatar:'TV', avBg:'#7C9364', rating:4.8, reviews:73, price:450, icon:'▶️', iconBg:'var(--lavender)' },
+
+    { cat:'music', title:'Music Production', note:'', creator:'Riya M.', avatar:'RM', avBg:'var(--purple)', rating:4.9, reviews:124, price:1500, icon:'🎧', iconBg:'var(--sun)' },
+    { cat:'music', title:'Guitar Lessons', note:'', creator:'Ananya P.', avatar:'AP', avBg:'#B88A56', rating:4.9, reviews:112, price:400, icon:'🎸', iconBg:'var(--sky)' },
+
+    { cat:'tutoring', title:'Maths Tutor', note:'', creator:'Tushar V.', avatar:'TV', avBg:'#7C9364', rating:4.8, reviews:73, price:400, icon:'📐', iconBg:'var(--mint)' },
+    { cat:'tutoring', title:'IELTS Speaking', note:'', creator:'Tanvi N.', avatar:'TN', avBg:'#C97A9A', rating:4.7, reviews:29, price:400, icon:'📚', iconBg:'var(--pink)' },
+
+    { cat:'photography', title:'Portrait Photography', note:'', creator:'Sana V.', avatar:'SV', avBg:'#8A5FA0', rating:4.9, reviews:95, price:1800, icon:'📸', iconBg:'var(--sun)' },
+    { cat:'photography', title:'Product Photography', note:'', creator:'Dev K.', avatar:'DK', avBg:'var(--peach)', rating:4.8, reviews:58, price:1200, icon:'📷', iconBg:'var(--pink)' },
+  ];
+
+  const catLabels = { design:'Design', tech:'Tech', video:'Video', music:'Music', tutoring:'Tutoring', photography:'Photography' };
+
+  let activeCat = 'design';
+  let query = '';
+  let sortBy = 'popular';
+
+  const grid = document.getElementById('grid');
+  const emptyState = document.getElementById('emptyState');
+  const resultsCount = document.getElementById('resultsCount');
+  const chips = document.querySelectorAll('.catchip');
+  const searchInput = document.getElementById('searchInput');
+  const sortSelect = document.getElementById('sortSelect');
+
+  function render() {
+    let list = SKILLS.filter(s => s.cat === activeCat);
+    if (query.trim()) {
+      const q = query.trim().toLowerCase();
+      list = list.filter(s => s.title.toLowerCase().includes(q) || s.creator.toLowerCase().includes(q));
+    }
+    if (sortBy === 'rating') list = [...list].sort((a,b) => b.rating - a.rating);
+    if (sortBy === 'price-low') list = [...list].sort((a,b) => a.price - b.price);
+    if (sortBy === 'price-high') list = [...list].sort((a,b) => b.price - a.price);
+
+    grid.innerHTML = '';
+    if (list.length === 0) {
+      emptyState.classList.add('show');
+    } else {
+      emptyState.classList.remove('show');
+      list.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'skillcard-full';
+        card.innerHTML = `
+          <div class="badge" style="background:${s.iconBg}">${s.icon}</div>
+          <h3>${s.title} ${s.note ? `<span class="note">${s.note}</span>` : ''}</h3>
+          <div class="creatorline">
+            <div class="mini-av" style="background:${s.avBg}">${s.avatar}</div>
+            <span>by ${s.creator}</span>
+          </div>
+          <div class="ratingline">★ ${s.rating.toFixed(1)} <span class="cnt">(${s.reviews})</span></div>
+          <div class="priceline">₹${s.price}</div>
+          <a class="btn btn-primary" href="creator'sprofile.html?name=${encodeURIComponent(s.creator)}&skill=${encodeURIComponent(s.title)}">View Profile</a>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    const label = query.trim() ? `&ldquo;${query.trim()}&rdquo;` : `&ldquo;${catLabels[activeCat]}&rdquo;`;
+    resultsCount.innerHTML = `${list.length} result${list.length === 1 ? '' : 's'} for ${label}`;
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCat = chip.dataset.cat;
+      render();
+    });
+  });
+  searchInput.addEventListener('input', (e) => {
+    query = e.target.value;
+    render();
+  });
+
+  sortSelect.addEventListener('change', (e) => {
+    sortBy = e.target.value;
+    render();
+  });
+
+  document.getElementById('clearFilters').addEventListener('click', () => {
+    query = '';
+    searchInput.value = '';
+    sortBy = 'popular';
+    sortSelect.value = 'popular';
+    chips.forEach(c => c.classList.remove('active'));
+    document.querySelector('.catchip[data-cat="design"]').classList.add('active');
+    activeCat = 'design';
+    render();
+  });
+
+  render();
+</script>
+
+</body>
+</html>

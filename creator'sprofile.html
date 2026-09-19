@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillSwap — Aarav Sharma</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', 'Poppins', sans-serif;
+    background:#FDF3E7;
+    color:#1E1B3A;
+  }
+  a { text-decoration:none; color:inherit; }
+
+  /* Navbar */
+  .navbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 60px;
+  }
+  .logo { font-size:22px; font-weight:800; color:#1E1B3A; }
+  .logo span { color:#5B5FEF; }
+  .nav-links { display:flex; gap:36px; font-size:15px; font-weight:500; color:#3A3560; }
+  .nav-links a.active { color:#5B5FEF; border-bottom:2px solid #5B5FEF; padding-bottom:4px; }
+  .nav-right { display:flex; align-items:center; gap:22px; }
+  .search-icon { font-size:18px; cursor:pointer; }
+  .btn-primary {
+    background:#5B5FEF; color:#fff; border:none;
+    padding:11px 22px; border-radius:24px; font-weight:600;
+    font-size:14px; cursor:pointer;
+  }
+
+  /* Profile header */
+  .profile-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:50px 60px 30px; flex-wrap:wrap; gap:30px;
+  }
+  .avatar-wrap { position:relative; width:220px; height:220px; }
+  .avatar-blob {
+    position:absolute; top:-20px; left:-40px;
+    width:260px; height:260px; background:#D9CEFB; border-radius:50% 45% 55% 50% / 55% 50% 50% 45%;
+    z-index:0;
+  }
+  .avatar-circle {
+    position:relative; width:200px; height:200px; border-radius:50%;
+    background:linear-gradient(135deg,#9AB6E8,#6E7FD6);
+    border:8px solid #fff; z-index:2;
+    display:flex; align-items:center; justify-content:center;
+    font-size:70px; color:#fff; font-weight:700;
+    overflow:hidden;
+  }
+  .avatar-badge {
+    position:absolute; bottom:0; right:0; width:56px; height:56px;
+    background:#CDEFD8; border-radius:50%; border:5px solid #FDF3E7;
+    display:flex; align-items:center; justify-content:center; font-size:22px; z-index:3;
+  }
+
+  .profile-info { flex:1; min-width:280px; padding-left:20px; }
+  .profile-info h1 { font-size:42px; font-weight:800; }
+  .role { display:flex; align-items:center; gap:8px; color:#5B5FEF; font-weight:600; font-size:19px; margin:10px 0; }
+  .tagline { font-style:italic; color:#5B5568; font-size:16px; max-width:400px; line-height:1.5; }
+
+  .doodle { text-align:right; color:#5B5FEF; font-family:'Comic Sans MS', cursive; font-size:15px; line-height:1.3; }
+
+  /* Cards row */
+  .cards-row {
+    display:flex; gap:24px; padding:20px 60px; flex-wrap:wrap;
+  }
+  .card {
+    background:#FFFDF9; border-radius:22px; padding:28px 30px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.04);
+  }
+  .card h2 { font-size:22px; font-weight:800; margin-bottom:20px; }
+  .skills-card { flex:1; min-width:280px; }
+  .pill-row { display:flex; gap:12px; flex-wrap:wrap; }
+  .pill {
+    padding:10px 22px; border-radius:20px; font-weight:600; font-size:14px; color:#fff;
+  }
+  .pill.blue { background:#5B5FEF; }
+  .pill.lavender { background:#D9CEFB; color:#3A3560; }
+  .pill.mint { background:#B9E8C9; color:#1E4B2C; }
+
+  .info-card { flex:1.4; min-width:340px; display:flex; flex-direction:column; }
+  .stats-row { display:flex; }
+  .stat { flex:1; padding:0 18px; border-right:1px solid #EEE3D3; }
+  .stat:last-child { border-right:none; }
+  .stat-icon {
+    width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:16px; margin-bottom:10px;
+  }
+  .stat-icon.star { background:#FBE3B0; }
+  .stat-icon.check { background:#D9CEFB; }
+  .stat-icon.rupee { background:#B9E8C9; }
+  .stat .big { font-size:20px; font-weight:800; }
+  .stat .small { font-size:13px; color:#8A8497; margin-top:2px; }
+
+  /* Portfolio */
+  .portfolio-section { padding:30px 60px; }
+  .portfolio-card { background:#FFFDF9; border-radius:22px; padding:30px; box-shadow:0 4px 16px rgba(0,0,0,0.04); }
+  .portfolio-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; }
+  .portfolio-top h2 { font-size:26px; font-weight:800; }
+  .portfolio-grid { display:flex; gap:20px; flex-wrap:wrap; }
+  .portfolio-item {
+    flex:1; min-width:240px; height:220px; border-radius:16px; position:relative;
+    overflow:hidden; display:flex; align-items:flex-end; padding:14px;
+    background-size:cover; background-position:center;
+  }
+  .portfolio-item.p1 { background:linear-gradient(135deg,#FADFA1,#F4B8C6); }
+  .portfolio-item.p2 { background:linear-gradient(135deg,#8A83A8,#5F5A7D); }
+  .portfolio-item.p3 { background:linear-gradient(135deg,#C9B8F0,#8E9EE8); }
+  .tag-label {
+    background:#fff; padding:6px 14px; border-radius:14px; font-size:13px; font-weight:600;
+  }
+
+  /* CTA */
+  .cta-section { padding:20px 60px 50px; }
+  .cta-box {
+    background:linear-gradient(135deg,#E3DBFB,#F6D9E3);
+    border-radius:24px; padding:44px 50px;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;
+    position:relative; overflow:hidden;
+  }
+  .cta-box h2 { font-size:30px; font-weight:800; }
+  .cta-box p { color:#5A5568; margin-top:8px; }
+  .btn-cta {
+    background:#5B5FEF; color:#fff; border:none; padding:15px 28px;
+    border-radius:26px; font-weight:700; font-size:15px; cursor:pointer;
+    white-space:nowrap;
+  }
+
+  footer {
+    padding:30px 60px; display:flex; justify-content:space-between; align-items:center;
+    color:#8A8497; font-size:14px; flex-wrap:wrap; gap:10px;
+  }
+  footer .logo { font-size:18px; }
+
+  @media(max-width:700px){
+    .navbar, .profile-header, .cards-row, .portfolio-section, .cta-section, footer { padding-left:20px; padding-right:20px; }
+    .nav-links { display:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="skillswap.html" class="logo">SkillSwap 
+      <svg class="doodle" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12c3-6 6 6 9 0s6-6 9 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </a>
+
+    <div class="nav-links">
+      <a class="active" href="index.html">Find a Skill</a>
+      <a href="creator'sprofile.html">Creator's profile</a>
+      <a href="offeraskill.html">Offer a skill</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <span class="search-icon">🔍</span>
+      <button class="btn-primary">Get Started</button>
+    </div>
+  </div>
+
+  <div class="profile-header">
+    <div class="avatar-wrap">
+      <div class="avatar-blob"></div>
+      <div class="avatar-circle">AS</div>
+      <div class="avatar-badge">🎨</div>
+    </div>
+
+    <div class="profile-info">
+      <h1>Aarav Sharma</h1>
+      <div class="role">🎨 Graphic Designer</div>
+      <p class="tagline">"I create posters, thumbnails and social-media graphics."</p>
+    </div>
+
+    <div class="doodle">good<br>designs<br>better<br>vibes ♡</div>
+  </div>
+
+  <div class="cards-row">
+    <div class="card skills-card">
+      <h2>Skills</h2>
+      <div class="pill-row">
+        <span class="pill blue">Canva</span>
+        <span class="pill lavender">Photoshop</span>
+        <span class="pill mint">Branding</span>
+      </div>
+    </div>
+
+    <div class="card info-card">
+      <h2>Quick info</h2>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-icon star">⭐</div>
+          <div class="big">4.8</div>
+          <div class="small">Creator rating (96 reviews)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon check">✓</div>
+          <div class="big">Completed: 24 services</div>
+          <div class="small">Successfully completed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon rupee">₹</div>
+          <div class="big">₹300 / project</div>
+          <div class="small">Starting price</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="portfolio-section">
+    <div class="portfolio-card">
+      <div class="portfolio-top">
+        <h2>Portfolio</h2>
+        <div class="doodle" style="font-size:14px;">Just a few<br>of my favourites ♡</div>
+      </div>
+      <div class="portfolio-grid">
+        <div class="portfolio-item p1"><span class="tag-label">Poster Design</span></div>
+        <div class="portfolio-item p2"><span class="tag-label">Branding</span></div>
+        <div class="portfolio-item p3"><span class="tag-label">Social Media</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-box">
+      <div>
+        <h2>Like Aarav's work?</h2>
+        <p>Send a request and let's bring your idea to life.</p>
+      </div>
+      <button class="btn-cta">Request Service →</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="logo">SkillSwap ~</div>
+    <div>Made for creators who are just getting started.</div>
+    <div>© 2026 SkillSwap</div>
+  </footer>
+
+</body>
+</html>
